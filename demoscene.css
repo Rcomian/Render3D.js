@@ -1,0 +1,35 @@
+#mainview {
+  position:relative;
+  width:640px;
+  height:480px;
+  margin:auto;
+}
+
+#sceneContainer {
+  border:1px solid black;
+}
+
+#renderinfo {
+  background-color:#F0F0F0;
+  position:absolute;
+  left:0;
+  top:0px;
+}
+
+#fps {
+  background-color:#F0F0F0;
+  position:absolute;
+  left:0;
+  top:20px;
+}
+
+#primCounter {
+  background-color:#F0F0F0;
+  position:absolute;
+  left:0;
+  top:40px;
+}
+
+#notes {
+  display:none;
+}
