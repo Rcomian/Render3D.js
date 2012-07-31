@@ -1,5 +1,5 @@
+var inquisitiveturtle = inquisitiveturtle || { render3d : { prim: {}}};
 var vector = inquisitiveturtle.render3d.vector;
-var cube = inquisitiveturtle.render3d.prim.cube;
 
 var display;
 var world;
@@ -21,15 +21,15 @@ function range(start, stop, steps)
   if (steps <= 1)
     return [start];
     
-  var range = [];
+  var lrange = [];
  
   var STEP = (stop - start) / (steps-1);
   
   for (var i = 0; i < steps; i++)
   {
-    range[i] = start + (i * STEP);
+    lrange[i] = start + (i * STEP);
   }
-  return range;
+  return lrange;
 }
 
 function getHeight(x, y)
@@ -57,17 +57,6 @@ var colormap = [
   [0,1,0,1,0,1]
 ];
 
-var blankMap = [
-  [0,0,0,0,0,0],
-  [0,0,0,0,0,0],
-  [0,0,0,0,0,0],
-  [0,0,0,0,0,0],
-  [0,0,0,0,0,0],
-  [0,0,0,0,0,0]
-];
-
-var minxcol = 100;
-
 function getColor(x, y)
 {
     var yt = Math.floor((y + 0.999) * (colormap.length/2));
@@ -85,29 +74,13 @@ function getColor(x, y)
 function getAvgHeight(minx, miny, maxx, maxy)
 {
   return getHeight(minx, miny);
-  
-  var maxheight = -1000;
-  var currentheight;
-  var yrange = range(miny, maxy, 4)
-  var xrange = range(minx, maxx, 4);
-  for (var s=0, ss=yrange.length; s < ss; s++)
-  {
-    for (var t=0, tt=xrange.length; t < tt; t++)
-    {
-      currentheight = getHeight(xrange[t], xrange[s]);
-      if (currentheight > maxheight)
-        maxheight = currentheight;
-    }
-  }
-  
-  return maxheight;
 }
 
 
 function getAvgColor(minx, miny, maxx, maxy)
 {
   var color = new vector(0,0,0);
-  var yrange = range(miny, maxy, 4)
+  var yrange = range(miny, maxy, 4);
   var xrange = range(minx, maxx, 4);
   for (var s=0, ss=yrange.length; s < ss; s++)
   {
@@ -171,7 +144,7 @@ var pauseset = 0;
 
 var timer = null;
 function doClick() {
-    if (animate > 0)
+    if (animate && animate > 0)
     {
         clearInterval(timer);
         doFrame();
@@ -183,17 +156,11 @@ function doClick() {
         animate = new Date().getTime();
         nextexpected = new Date().getTime();
         doFrame();
-        timer = setInterval("doFrame();", 1000/25);
+        timer = setInterval(function() { doFrame();}, 1000/25);
     }
   }
 
 
-
-
-
-
-var rotate = new vector(0, 0.1, 0);
-var move = new vector(0,0,4);
 
 var pad = new vector(0,0,0);
 
@@ -207,8 +174,8 @@ function doAnimation(iteration){
     
     world.prims[0].moveTo( pad );
 
-    pad.x = -15000 * Math.sin(iteration/10);
-    pad.z = -15000 * Math.cos(iteration/10);
+    pad.x = -10000 * Math.sin(iteration/10);
+    pad.z = -20000 * Math.cos(iteration/10);
     pad.y = 2000 + (500 * Math.cos(iteration/50)) + getWorldHeight(pad.x,pad.z);
     world.prims[1].moveTo( pad );
     
@@ -301,10 +268,10 @@ function doFrame() {
     }
         
       
-    if (fpsspan != null)
+    if (fpsspan !== null)
       fpsspan.innerHTML = "FPS " + totalfps/10 + " (" + display.camera._detailLevel.toFixed(5) + ")";
       
-    if (primCounter != null)
+    if (primCounter !== null)
         primCounter.innerHTML = "Prims: " + display.renderinfo.primCount + "(" +  (display.renderinfo.primCount / (timeend-timestart)).toFixed(2) + "Kp/s)";
 
     if (animate > 0)
